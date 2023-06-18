@@ -11,8 +11,9 @@ import UIKit
 class Navigation {
     static var shared = Navigation()
     
-    func pushToNewRoot(from vc: UIViewController, to: UIViewController, isAnimated: Bool = true) {
-        vc.navigationController?.pushViewController(to, animated: isAnimated)
+    func pushToNewRootWithXib(from vc: UIViewController, to: UIViewController, isAnimated: Bool = true) {
+        let newVC = HomeViewController(nibName: "HomeViewController", bundle: nil) as HomeViewController
+        vc.navigationController?.pushViewController(newVC, animated: isAnimated)
         to.navigationController?.isNavigationBarHidden = true
     }
 }

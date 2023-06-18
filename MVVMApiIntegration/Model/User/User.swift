@@ -8,8 +8,6 @@
 import Foundation
 struct User: Codable {
     let id: Int
-    
-    //Add property wrapper here
     let firstName, lastName, maidenName: String
     let age: Int
     let email, phone, username, password: String

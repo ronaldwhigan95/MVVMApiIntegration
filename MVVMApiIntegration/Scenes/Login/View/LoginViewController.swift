@@ -9,6 +9,8 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
+    var vm: LoginViewModel = LoginViewModel()
+    
     var loginForm: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +29,7 @@ class LoginViewController: UIViewController {
         txtFld.placeholder = "Username"
         txtFld.backgroundColor = .white
         txtFld.borderStyle = .roundedRect
+        txtFld.autocapitalizationType = .none
         
         return txtFld
     }()
@@ -37,6 +40,7 @@ class LoginViewController: UIViewController {
         txtFld.isSecureTextEntry = true
         txtFld.backgroundColor = .white
         txtFld.borderStyle = .roundedRect
+        txtFld.autocapitalizationType = .none
         
         return txtFld
     }()
@@ -56,11 +60,25 @@ class LoginViewController: UIViewController {
         
         return lbl
     }()
+    
     var loginBtn: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("Login", for: .normal)
         btn.backgroundColor = UIColor(hexString: "#004646")
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        btn.layer.cornerRadius = 5
+        btn.clipsToBounds = true
+        
+        return btn
+    }()
+    
+    var signUpBtn: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitle("signUp", for: .normal)
+        btn.backgroundColor = UIColor(hexString: "#006e6e")
         btn.setTitleColor(.white, for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         btn.layer.cornerRadius = 5
@@ -89,8 +107,33 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addSubviews()
+        addLoginFcn()
     }
     
+    
+}
+
+extension LoginViewController {
+    func addLoginFcn() {
+        loginBtn.addTarget(self, action: #selector(onPressLogin), for: .touchUpInside)
+    }
+    
+    @objc func onPressLogin() {
+        guard let notNilUsername = username.text else { return }
+        guard let notNilPassword = password.text else { return }
+        vm.login(username: notNilUsername, password: notNilPassword) { result, error in
+            if error != nil {
+                let alert = UIAlertController(title: "Authentication Error", message: error?.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                
+                self.present(alert, animated: true)
+            } else {
+                let newVC = HomeViewController(nibName: "HomeViewController", bundle: nil)
+                self.navigationController?.pushViewController(newVC, animated: true)
+                newVC.navigationController?.isNavigationBarHidden = true
+            }
+        }
+    }
 }
 
 
@@ -102,17 +145,18 @@ extension LoginViewController {
         view.sendSubviewToBack(bgImage)
         view.addSubview(loginForm)
         loginForm.addSubview(username)
-                loginForm.addSubview(password)
-                loginForm.addSubview(loginBtn)
-                loginForm.addSubview(isOptedToSaveSwitch)
-                loginForm.addSubview(rememberMeLabel)
+        loginForm.addSubview(password)
+        loginForm.addSubview(loginBtn)
+        loginForm.addSubview(signUpBtn)
+        loginForm.addSubview(isOptedToSaveSwitch)
+        loginForm.addSubview(rememberMeLabel)
         addConstraintsLoginForm()
     }
     
     func addConstraintsLoginForm() {
         NSLayoutConstraint.activate([
             // Login Form constraints
-            loginForm.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
+            loginForm.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.35),
             loginForm.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
             loginForm.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             loginForm.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -138,9 +182,15 @@ extension LoginViewController {
             rememberMeLabel.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 10),
             rememberMeLabel.leadingAnchor.constraint(equalTo: loginForm.leadingAnchor, constant: 20),
             
+            // SignUp button constraints
+            signUpBtn.heightAnchor.constraint(equalTo: loginForm.heightAnchor, multiplier: 0.15),
+            signUpBtn.bottomAnchor.constraint(equalTo: loginForm.bottomAnchor, constant: -20),
+            signUpBtn.leadingAnchor.constraint(equalTo: loginForm.leadingAnchor, constant: 20),
+            signUpBtn.trailingAnchor.constraint(equalTo: loginForm.trailingAnchor, constant: -20),
+            
             // Login button constraints
             loginBtn.heightAnchor.constraint(equalTo: loginForm.heightAnchor, multiplier: 0.15),
-            loginBtn.bottomAnchor.constraint(equalTo: loginForm.bottomAnchor, constant: -20),
+            loginBtn.bottomAnchor.constraint(equalTo: signUpBtn.topAnchor, constant: -10),
             loginBtn.leadingAnchor.constraint(equalTo: loginForm.leadingAnchor, constant: 20),
             loginBtn.trailingAnchor.constraint(equalTo: loginForm.trailingAnchor, constant: -20),
             

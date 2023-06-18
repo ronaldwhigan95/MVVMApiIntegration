@@ -18,7 +18,7 @@ class HomeViewModel : ViewModel {
     var error: Error?
     
     func getUserList() -> [User] {
-        guard let users = users?.users else { return [User(id: 1, firstName: "", lastName: "", maidenName: "", age: 1, gender: .male, email: "", phone: "", username: "", password: "", birthDate: "", image: "", bloodGroup: "", height: 2, weight: 2, eyeColor: .amber, hair: Hair(color: .auburn, type: .curly), domain: "", ip: "", address: Address(address: "", city: "", coordinates: Coordinates(lat: 0, lng: 0), postalCode: "", state: ""), macAddress: "", university: "", bank: Bank(cardExpire: "", cardNumber: "", cardType: "", currency: "", iban: ""), company: Company(address: Address(address: "", city: "", coordinates: Coordinates(lat: 1, lng: 1), postalCode: "", state: ""), department: "", name: "", title: ""), ein: "", ssn: "", userAgent: "")]}
+        guard let users = users?.users else { return [User(id: 1, firstName: "", lastName: "", maidenName: "", age: 1,  email: "", phone: "", username: "", password: "", birthDate: "", image: "")]}
         return users
     }
     

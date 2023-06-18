@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 
 class LoginViewModel: ViewModel {
     func getUserList() -> [User] {
@@ -16,6 +17,18 @@ class LoginViewModel: ViewModel {
     func getRowCount() -> Int {
         //Refactor, refer to SwiftUIImplementation
         return 0
+    }
+    
+    func login(username: String, password: String, completion: @escaping SignInCompletion) {
+        Auth.auth().signIn(withEmail: username, password: password) { result, error in
+            if let error = error {
+                print(error)
+                completion(result, error)
+            } else {
+                print("Logged in")
+                completion(result, error)
+            }
+        }
     }
     
     func navigateToDashboard() {
